@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transactions Management Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+  <script src="recoveryScript.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="title-frame">
+             <h1 class="title">TRANSACTIONS MANAGEMENT DASHBOARD</h1>
+        </div>
+
+        <section class="node-status">
+            <h2 class="node-status-title">Node Status</h2>
+            <div class="node-grid">
+                <div class="node1-box">
+                    <div class="node1-label">Node 1</div>
+                    <div class="node1-button-bg" id="node-1" onclick="checkNodeStatus(1)">
+                        <div class="node1-button" onclick="">Ping</div>
+                    </div> 
+                </div>
+                <div class="node2-box">
+                    <div class="node2-label">Node 2</div>
+                    <div class="node2-button-bg">
+                        <div class="node2-button" id="node-2" onclick="checkNodeStatus(2)">Ping</div>
+                    </div> 
+                </div>
+                <div class="node3-box">
+                    <div class="node3-label">Node 3</div>
+                    <div class="node3-button-bg">
+                        <div class="node3-button" id="node-3" onclick="checkNodeStatus(3)">Ping</div>
+                    </div> 
+                </div>
+            </div>
+        </section>
+
+        <div class="dashboard-content-wrapper">
+            
+            <div class="left-sidebar">
+                <section class="concurrency-frame">
+                    <h3 class="concurrency-title">Concurrency Control and Consistency</h3>
+                    <hr class="concurrency-divider">
+                    <div class="concurrency-container">
+                        <a href="concurrency.html">
+                            <button class="concurrency-button">Go to Concurrency Simulation</button>
+                        </a>
+                    </div>
+                </section>
+
+                <section class="recovery-frame">
+                    <h3 class="recovery-title">Global Failure Recovery</h3>
+                    <hr class="recovery-divider">
+                    <div class="recovery-container">
+                        <button class="recovery-button" onclick="openRecoveryModal(1)">Run Recovery Test 1</button>
+                        <button class="recovery-button" onclick="openRecoveryModal(2)">Run Recovery Test 2</button>
+                        <button class="recovery-button" onclick="openRecoveryModal(3)">Run Recovery Test 3</button>
+                        <button class="recovery-button" onclick="openRecoveryModal(4)">Run Recovery Test 4</button>
+                    </div>
+                </section>
+            </div>
+            
+            <section class="terminal-frame">
+                <h3 class="terminal-title">Database Management (CRUD Operations)</h3>
+                <div class="crud-box">
+                    <div class="crud-col">
+                        <h4>READ ENTRY</h4>
+                        <input type="text" id="read_id" placeholder="Target tconst"/>
+                        <div class="spacer"></div>
+                        <button class="crud-button" onclick="handleRead()">READ</button>
+                    </div>
+
+                    <div class="crud-col">
+                        <h4>ADD ENTRY</h4>
+                        <input type="text" id="insert_id" placeholder="tconst"/>
+                        <input type="text" id="insert_TitleType" placeholder="TitleType"/>
+                        <input type="text" id="insert_PrimaryName" placeholder="PrimaryTitle"/>
+                        <input type="text" id="insert_OriginalName" placeholder="OriginalTitle"/>
+                        <input type="text" id="insert_Adult" placeholder="Adult (0 or 1)"/>
+                        <input type="number" id="insert_StartYear" placeholder="startYear"/>
+                        <input type="number" id="insert_EndYear" placeholder="endYear"/>
+                        <input type="number" id="insert_RunTime" placeholder="runtimeMinutes"/>
+                        <input type="text" id="insert_Genre" placeholder="Genre"/>
+                        <button class="crud-button" onclick="handleInsert()">INSERT</button>
+                    </div>
+
+                    <div class="crud-col">
+                        <h4>UPDATE ENTRY</h4>
+                        <input type="text" id="update_id" placeholder="Target tconst"/>
+                        <input type="text" id="update_titleType" placeholder="New TitleType"/>
+                        <input type="text" id="update_PrimaryName" placeholder="New PrimaryTitle"/>
+                        <input type="text" id="update_OriginalName" placeholder="New OriginalTitle"/>
+                        <input type="text" id="update_Adult" placeholder="New Adult (0 or 1)"/>
+                        <input type="number" id="update_StartYear" placeholder="New startYear"/>
+                        <input type="number" id="update_EndYear" placeholder="New endYear"/>
+                        <input type="number" id="update_RunTime" placeholder="New runtimeMinutes"/>
+                        <input type="text" id="update_Genre" placeholder="New Genre"/>
+                        <button class="crud-button" onclick="handleUpdate()">UPDATE</button>
+                    </div>
+
+                    <div class="crud-col">
+                        <h4>DELETE ENTRY</h4>
+                        <input type="text" id="delete_id" placeholder="Target ID"/>
+                        <input type="number" id="delete_year" placeholder="Target Year"/>
+                        <div class="spacer"></div>
+                        <button class="crud-button" onclick="handleDelete()">DELETE</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- Recovery Modal -->
+    <div id="recoveryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Global Failure Recovery</h4>
+                <span id="testCase" ></span>
+            </div>
+            <div class="modal-body">
+                <form id="recoveryForm">
+                    <div class="form-row">
+                        <label for="rec_transaction">Transaction</label>
+                        <select id="rec_transaction">
+                            <option value="INSERT">INSERT</option>
+                            <option value="UPDATE">UPDATE</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_fragment">Fragment</label>
+                        <select id="rec_fragment">
+                            <option value="2">Node 2</option>
+                            <option value="3">Node 3</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_titleType">Title Type</label>
+                        <select id="rec_titleType">
+                            <option value="movie">Movie</option>
+                            <option value="short">Short</option>
+                            <option value="tvSeries">TV Series</option>
+                            <option value="tvMovie">TV Movie</option>
+                            <option value="tvEpisode">TV Episode</option>
+                            <option value="tvMiniSeries">TV Mini Series</option>
+                            <option value="videoGame">Video</option>
+                            <option value="tvShort">TV Short</option>
+                            <option value="tvSpecial">TV Special</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_tconst">tConst</label>
+                        <input type="text" id="rec_tconst">
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_primaryTitle">Primary Title</label>
+                        <input type="text" id="rec_primaryTitle" placeholder="e.g. The Thing">
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_originalTitle">Original Title</label>
+                        <input type="text" id="rec_originalTitle" placeholder="e.g. The Thing">
+                    </div>
+                    <div class="form-row form-row-checkbox">
+                        <label for="rec_isAdult">Is Adult?</label>
+                        <input type="checkbox" id="rec_isAdult">
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_startYear">Start Year</label>
+                        <input type="number" id="rec_startYear" placeholder="YYYY">
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_endYear">End Year</label>
+                        <input type="number" id="rec_endYear" placeholder="YYYY">
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_runtimeMinutes">Runtime Minutes</label>
+                        <input type="number" id="rec_runtimeMinutes" placeholder="120">
+                    </div>
+                    <div class="form-row">
+                        <label for="rec_genres">Genres</label>
+                        <input type="text" id="rec_genres" placeholder="Horror,Sci-Fi,Thriller">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn btn-cancel" onclick="closeRecoveryModal()">Cancel</button>
+                <button class="modal-btn btn-submit" id="recoverySubmitBtn">Submit</button>
+            </div>
+        </div>
+    </div>
+    <!-- End of Recovery Modal-->
+</body>
+</html>

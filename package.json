@@ -1,0 +1,26 @@
+{
+  "name": "mco2_stadvdb_webapp",
+  "version": "1.0.0",
+  "description": "Webapp For MCO2 STADVDB",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "recovery": "node tests/recovery.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RJ3L/mco2_stadvdb_webapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RJ3L/mco2_stadvdb_webapp/issues"
+  },
+  "homepage": "https://github.com/RJ3L/mco2_stadvdb_webapp#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.3"
+  }
+}

@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: #FFFFFF;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    /* Ensure the main page scrolls naturally */
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-bottom: 50px; 
+    display: flex;
+    flex-direction: column;
+}
+
+.title-frame {
+    background: #367349;
+    padding: 20px 0;
+    width: 100%;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.title {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 32px; 
+    text-align: center;
+    color: #FFFFFF;
+    margin: 0;
+    letter-spacing: -1px;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    color: #4D4D4D;
+    cursor: pointer;
+    text-decoration: underline;
+    margin: 10px 0 10px 20px;
+    align-self: flex-start;
+    padding: 10px;
+}
+
+.back-button:hover {
+    color: #367349;
+}
+
+.isolation-panel {
+    margin: 0 20px 30px 20px;
+}
+
+.section-label {
+    font-size: 20px;
+    color: #367349;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #E0E0E0;
+    padding-bottom: 5px;
+}
+
+.isolation-container {
+    background: #F3F3F3;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: inline-block; 
+}
+
+.isolation-dropdown {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #4D4D4D;
+    border-radius: 4px;
+    background: #fff;
+    width: 300px;
+    cursor: pointer;
+}
+
+.terminal-frame {
+    margin: 0 20px;
+}
+
+.terminal-title {
+    font-size: 24px;
+    color: #367349;
+    margin: 0 0 15px 0;
+    font-weight: 700;
+}
+
+.crud-box {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px;
+    width: 100%;
+    align-items: stretch; 
+}
+
+.crud-col {
+    background: #F3F3F3;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.crud-col h4 {
+    margin: 0 0 5px 0;
+    color: #367349;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.crud-col input {
+    font-family: 'JetBrains Mono', monospace;
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 100%;
+}
+
+.crud-col input:focus {
+    outline: none;
+    border-color: #367349;
+    background-color: #fff;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.crud-button {
+    margin-top: auto; 
+    padding: 12px 0;
+    background-color: #367349;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+
+.crud-button:hover {
+    background-color: #265233;
+}
+
+.database-section {
+    margin: 0 20px 0 20px; 
+}
+
+.database-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #E0E0E0;
+    padding-bottom: 10px;
+}
+
+.refresh-button {
+    background: #F3F3F3;
+    border: 1px solid #ccc;
+    color: #367349;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+}
+.refresh-button:hover {
+    background: #e0e0e0;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto; 
+    background: #FFFFFF;
+    border: 1px solid #4D4D4D;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.database-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    text-align: left;
+}
+
+.database-table thead {
+    background-color: #367349;
+    color: #FFFFFF;
+}
+
+.database-table th {
+    padding: 12px 15px;
+    font-weight: 500;
+    white-space: nowrap; 
+}
+
+.database-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.database-table tbody tr:nth-child(even) {
+    background-color: #F9F9F9;
+}
+
+.database-table tbody tr:hover {
+    background-color: #E8F5E9; 
+}

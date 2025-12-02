@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Concurrency Simulation</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="concurrency.css">
+  <script src="concurrencyScript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="title-frame">
+             <h1 class="title">CONCURRENCY SIMULATION</h1>
+        </div>
+
+        <button class="back-button" onclick="window.location.href='index.html'">
+            &lt; Back To Dashboard
+        </button>
+
+        <div class="isolation-panel">
+            <h2 class="section-label">Select Isolation Level</h2>
+            <div class="isolation-container" style="display: flex; flex-direction: column; gap: 10px;">
+                
+                <div>
+                    <label for="isolationLevel" style="display:block; margin-bottom:5px; font-weight:bold;">Isolation Level:</label>
+                    <select id="isolationLevel" class="isolation-dropdown">
+                        <option value="READ UNCOMMITTED">Read Uncommitted (Dirty Read)</option>
+                        <option value="READ COMMITTED">Read Committed</option>
+                        <option value="REPEATABLE READ">Repeatable Read</option>
+                        <option value="SERIALIZABLE">Serializable</option>
+                    </select>
+                    <button onclick="setIsolation()"> SET LEVEL </button>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                    <input type="checkbox" id="demoMode" style="width: 20px; height: 20px; cursor: pointer;">
+                    <label for="demoMode" style="cursor: pointer;">Enable Demo Delay (10s Sleep)</label>
+                </div>
+                <small style="color: #666;">*Enable this to simulate a slow transaction (Race Condition).</small>
+
+            </div>
+        </div>
+
+        <section class="terminal-frame">
+                <h3 class="terminal-title">Database Management (CRUD Operations)</h3>
+                <div class="crud-box">
+                    <div class="crud-col">
+                        <h4>READ ENTRY</h4>
+                        <input type="text" id="read_id" placeholder="Target tconst"/>
+                        <div class="spacer"></div>
+                        <button class="crud-button" onclick="handleRead()">READ</button>
+                    </div>
+
+                    <div class="crud-col">
+                        <h4>ADD ENTRY</h4>
+                        <input type="text" id="insert_id" placeholder="tconst"/>
+                        <input type="text" id="insert_TitleType" placeholder="TitleType"/>
+                        <input type="text" id="insert_PrimaryName" placeholder="PrimaryTitle"/>
+                        <input type="text" id="insert_OriginalName" placeholder="OriginalTitle"/>
+                        <input type="text" id="insert_Adult" placeholder="Adult (0 or 1)"/>
+                        <input type="number" id="insert_StartYear" placeholder="startYear"/>
+                        <input type="number" id="insert_EndYear" placeholder="endYear"/>
+                        <input type="number" id="insert_RunTime" placeholder="runtimeMinutes"/>
+                        <input type="text" id="insert_Genre" placeholder="Genre"/>
+                        <button class="crud-button" onclick="handleInsert()">INSERT</button>
+                    </div>
+
+                    <div class="crud-col">
+                        <h4>UPDATE ENTRY</h4>
+                        <input type="text" id="update_id" placeholder="Target tconst"/>
+                        <input type="text" id="update_titleType" placeholder="New TitleType"/>
+                        <input type="text" id="update_PrimaryName" placeholder="New PrimaryTitle"/>
+                        <input type="text" id="update_OriginalName" placeholder="New OriginalTitle"/>
+                        <input type="text" id="update_Adult" placeholder="New Adult (0 or 1)"/>
+                        <input type="number" id="update_StartYear" placeholder="New startYear"/>
+                        <input type="number" id="update_EndYear" placeholder="New endYear"/>
+                        <input type="number" id="update_RunTime" placeholder="New runtimeMinutes"/>
+                        <input type="text" id="update_Genre" placeholder="New Genre"/>
+                        <button class="crud-button" onclick="handleUpdate()">UPDATE</button>
+                    </div>
+
+
+                    <div class="crud-col">
+                        <h4>DELETE ENTRY</h4>
+                        <input type="text" id="delete_id" placeholder="Target ID"/>
+                        <input type="number" id="delete_year" placeholder="Target Year"/>
+                        <div class="spacer"></div>
+                        <button class="crud-button" onclick="handleDelete()">DELETE</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+   <section class="database-section">
+    <div class="database-row">
+        <h3 class="section-label" style="margin-bottom:0; border:none;">Live Database View</h3>
+        <div>
+            <button class="refresh-button" style="background-color: #367349; color: white; margin-right: 10px;" onclick="handleSync()">
+                &#x21c4; Sync Nodes
+            </button>
+            
+            <button class="refresh-button" onclick="fetchDatabaseData()">
+                &#x21bb; Refresh Table
+            </button>
+        </div>
+    </div>
+    
+    <!--Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/table-->
+    <div class="table-container">
+        <table class="database-table">
+            <thead>
+                <tr>
+                    <th>tconst</th>
+                    <th>titleType</th>
+                    <th>primaryTitle</th>
+                    <th>originalTitle</th>
+                    <th>isAdult</th>
+                    <th>startYear</th>
+                    <th>endYear</th>
+                    <th>runtimeMinutes</th>
+                    <th>genres</th>
+                </tr>
+            </thead>
+            <tbody id="database-body">
+                </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>
