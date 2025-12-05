@@ -2,7 +2,7 @@ const {node1, node2, node3, nodeUtils} = require('./nodes.js');
 const transactionUtils = require('./transactions.js'); 
 
 const dbQueries = {
-    selectQuery: async function (query, limit, fromYear, toYear, node, isolationLevel){
+    selectQuery: async function (query, limit, node, isolationLevel){
         
         // Helper to run the select via transactionUtils
         const runSelect = async (targetNode, sql) => {
@@ -21,33 +21,21 @@ const dbQueries = {
         if (node == 1 && await nodeUtils.pingNode(1)){
             console.log("DB Query: Select from Node 1");
             return await runSelect(1, `SELECT * FROM node_1 ` + query + ` ` + limit);
-        } else {
-            // Logic to choose node based on year
-            if (toYear <= 2010 || toYear == null){
-                if (await nodeUtils.pingNode(2)){
-                    console.log("DB Query: Select from Node 2");
-                    return await runSelect(2, `SELECT * FROM node_2 ` + query + ` ` + limit);
-                } else if (await nodeUtils.pingNode(1)){
-                    console.log("DB Query: Select from Node 1");
-                    return await runSelect(1, `SELECT * FROM node_1 ` + query + ` ` + limit);
-                }
-            } else if (fromYear > 2010){
-                if (await nodeUtils.pingNode(3)){
-                    console.log("DB Query: Select from Node 3");
-                    return await runSelect(3, `SELECT * FROM node_3 ` + query + ` ` + limit);
-                } else if (await nodeUtils.pingNode(1)){
-                    console.log("DB Query: Select from Node 1");
-                    return await runSelect(1, `SELECT * FROM node_1 ` + query + ` ` + limit);
-                }
-            }
-            // Fallback for complex ranges (Simplified for demo stability)
-            if (await nodeUtils.pingNode(1)){
-                 return await runSelect(1, `SELECT * FROM node_1 ` + query + ` ` + limit);
-            }
-            
-             console.log("DB Query: No suitable node found or range logic complex.");
-             return [];
         }
+        // Logic to choose node based on year
+        if (await nodeUtils.pingNode(2)){
+            console.log("DB Query: Select from Node 2");
+            return await runSelect(2, `SELECT * FROM node_2 ` + query + ` ` + limit);
+        } else if (await nodeUtils.pingNode(1)){
+            console.log("DB Query: Select from Node 1");
+            return await runSelect(1, `SELECT * FROM node_1 ` + query + ` ` + limit);
+        } else if (await nodeUtils.pingNode(3)){
+            console.log("DB Query: Select from Node 3");
+            return await runSelect(3, `SELECT * FROM node_3 ` + query + ` ` + limit);
+        }
+            
+        console.log("DB Query: No suitable node found or range logic complex.");
+        return [];
     },
     insertQuery: async function (valuesQuery, startYear, node, isolationLevel, isDemoMode){
         let baseQuery = "INSERT INTO "

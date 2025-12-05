@@ -32,7 +32,7 @@ async function demoCaseCrash(sourceNode, targetNode, action, newTitle){
             REPLACE INTO node_${sourceNode} (tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
-        const values = [
+        let values = [
             newTitle.tconst,
             newTitle.titleType,
             newTitle.pTitle,
@@ -48,8 +48,27 @@ async function demoCaseCrash(sourceNode, targetNode, action, newTitle){
         sourceConn.release()
 
         console.log("   [STEP 2] Target node recreates the transaction.")
-        query = `REPLACE INTO node_${targetNode} (tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            if (action == "UPDATE"){
+            query = `
+                SET @NODE_2_ALIVE = 0;
+                SET @NODE_3_ALIVE = 0;
+                UPDATE node_${targetNode} SET titleType=?, primaryTitle=?, originalTitle=?, isAdult=?, startYear=?, endYear=?, runtimeMinutes=?, genres=? 
+                WHERE tconst=?`
+            values = [
+                newTitle.titleType, newTitle.pTitle, newTitle.oTitle, newTitle.isAdult,
+                newTitle.startYear, newTitle.endYear, newTitle.runtime, newTitle.genres, newTitle.tconst
+            ]
+        } else{
+            query = `
+                SET @NODE_2_ALIVE = 0;
+                SET @NODE_3_ALIVE = 0;
+                INSERT INTO node_${targetNode} (tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            values = [
+                newTitle.tconst, newTitle.titleType, newTitle.pTitle, newTitle.oTitle, newTitle.isAdult,
+                newTitle.startYear, newTitle.endYear, newTitle.runtime, newTitle.genres
+            ]
+        }
         targetConn = await nodeUtils.getConnection(targetNode)
         await targetConn.beginTransaction()
         await targetConn.query(query, values)
@@ -106,23 +125,30 @@ async function demoCaseRecovery(sourceNode, targetNode, action, newTitle){
     let targetConn = null
     console.log("   [STEP 1] Source node starts a write transaction and commits.")
     await sourceConn.beginTransaction()
-    let query = `
-        SET @NODE_2_ALIVE = 0;
-        SET @NODE_3_ALIVE = 0;
-        REPLACE INTO node_${sourceNode} (tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-
-    const values = [
-        newTitle.tconst,
-        newTitle.titleType,
-        newTitle.pTitle,
-        newTitle.oTitle,
-        newTitle.isAdult,
-        newTitle.startYear,
-        newTitle.endYear,
-        newTitle.runtime,
-        newTitle.genres
-    ]
+    let query = ''
+    let values = ''
+    if (action == "UPDATE"){
+        query = `
+            SET @NODE_2_ALIVE = 0;
+            SET @NODE_3_ALIVE = 0;
+            UPDATE node_${sourceNode} 
+                SET titleType=?, primaryTitle=?, originalTitle=?, isAdult=?, startYear=?, endYear=?, runtimeMinutes=?, genres=? 
+                WHERE tconst=?`
+        values = [
+            newTitle.titleType, newTitle.pTitle, newTitle.oTitle, newTitle.isAdult,
+            newTitle.startYear, newTitle.endYear, newTitle.runtime, newTitle.genres, newTitle.tconst
+        ]
+    } else{
+        query = `
+            SET @NODE_2_ALIVE = 0;
+            SET @NODE_3_ALIVE = 0;
+            INSERT INTO node_${sourceNode} (tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        values = [
+            newTitle.tconst, newTitle.titleType, newTitle.pTitle, newTitle.oTitle, newTitle.isAdult,
+            newTitle.startYear, newTitle.endYear, newTitle.runtime, newTitle.genres
+        ]
+    }
     await sourceConn.query(query, values)
     await sourceConn.commit()
 
@@ -172,3 +198,28 @@ module.exports = {
     demoCaseCrash: demoCaseCrash,
     demoCaseRecovery: demoCaseRecovery
 }
+const TEST_TYPE = process.argv[2]; 
+const NODE_ARG = process.argv[3];
+const ID_ARG   = process.argv[4];
+const NEW_TITLE = process.argv[5]; 
+const NODE = NODE_ARG ? parseInt(NODE_ARG) : 1; 
+
+(async () => {
+    if (!TEST_TYPE || NODE == 1 ||!ID_ARG){
+        console.log("Please provide arguments: <TEST_NUM> <NODE_ID> <TITLE_ID> <NEW_TITLE>");
+        process.exit();
+    }
+    const testTitle = new Title(ID_ARG, "MOVIE", "Test Demo", "Demo Test", 0, 2000, 2001, 120, "Horror,Thriller")
+    try {
+        switch(TEST_TYPE){
+            case '1': await demoCaseCrash(NODE, 1, "INSERT", testTitle); break;
+            case '2': await demoCaseRecovery(NODE, 1, "INSERT", testTitle); break;
+            case '3': await demoCaseCrash(1, NODE, "INSERT", testTitle); break;
+            case '4': await demoCaseRecovery(1, NODE, "INSERT", testTitle); break;
+            default: console.log("Unknown Test Type");
+        }
+    } catch (e){
+        console.error("Test Error:", e.message);
+    }
+    process.exit();
+})();
