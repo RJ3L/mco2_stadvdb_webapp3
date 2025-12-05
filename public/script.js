@@ -196,7 +196,7 @@ async function handleRead(){
         const result = await response.json();
         
         if(result.result && result.result.length > 0){
-             alert("Record Found (Isolation: " + isolationLevel + "):\n" + JSON.stringify(result.result[0], null, 2));
+             alert("Record Found:\n" + JSON.stringify(result.result[0], null, 2));
         } else {
              alert("No record found");
         }
