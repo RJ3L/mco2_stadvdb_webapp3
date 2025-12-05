@@ -36,7 +36,7 @@ app.post('/api/read', async (req, res) => {
         console.log(`Reading Entry: ${id} | Isolation: ${isolationLevel}`);
         const query = `WHERE tconst = '${id}'`;
         
-        const result = await db.selectQuery(query, "LIMIT 1", 1900, 2100, 1, isolationLevel);
+        const result = await db.selectQuery(query, "LIMIT 1", 1, isolationLevel);
         
         res.status(200).json({ message: 'Read successful', result: result }); 
     } catch (error) {
