@@ -195,8 +195,8 @@ async function demoCaseRecovery(sourceNode, targetNode, action, newTitle){
     }
 }
 module.exports = {
-    demoCaseCrash: demoCaseCrash,
-    demoCaseRecovery: demoCaseRecovery
+    //demoCaseCrash: demoCaseCrash,
+    //demoCaseRecovery: demoCaseRecovery
 }
 const TEST_TYPE = process.argv[2]; 
 const NODE_ARG = process.argv[3];
