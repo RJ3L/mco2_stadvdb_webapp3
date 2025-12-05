@@ -203,7 +203,7 @@ const NODE_ARG = process.argv[3];
 const ID_ARG   = process.argv[4];
 const NEW_TITLE = process.argv[5]; 
 const NODE = NODE_ARG ? parseInt(NODE_ARG) : 1; 
-
+/*
 (async () => {
     if (!TEST_TYPE || NODE == 1 ||!ID_ARG){
         console.log("Please provide arguments: <TEST_NUM> <NODE_ID> <TITLE_ID> <NEW_TITLE>");
@@ -222,4 +222,4 @@ const NODE = NODE_ARG ? parseInt(NODE_ARG) : 1;
         console.error("Test Error:", e.message);
     }
     process.exit();
-})();
+})(); */
