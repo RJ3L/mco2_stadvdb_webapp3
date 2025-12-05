@@ -83,6 +83,7 @@ app.post('/api/update', async (req, res) => {
         
         res.status(200).json({ message: 'Update successful', result: result }); 
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: 'Update failed', error: error.message }); 
     }
 });
