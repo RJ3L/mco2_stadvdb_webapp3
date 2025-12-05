@@ -51,7 +51,7 @@ const dbQueries = {
             let query = `
                 SET @NODE_2_ALIVE = ${node2Alive ? 1 : 0};
                 SET @NODE_3_ALIVE = ${node3Alive ? 1 : 0};
-                SET @REPLICATOR_SYNC = 0;
+                SET @REPLICATOR_SYNC = 1;
                 SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel || 'READ COMMITTED'};
                 START TRANSACTION;
                 ${baseQuery} node_1 ${tableQuery} ${valuesQuery}
@@ -109,7 +109,7 @@ const dbQueries = {
             let updateQuery = `
                 SET @NODE_2_ALIVE = ${node2Alive ? 1 : 0};
                 SET @NODE_3_ALIVE = ${node3Alive ? 1 : 0};
-                SET @REPLICATOR_SYNC = 0;
+                SET @REPLICATOR_SYNC = 1;
                 SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel || 'REPEATABLE READ'};
                 START TRANSACTION;
                 UPDATE node_1 ${updateClause}
@@ -158,7 +158,7 @@ const dbQueries = {
             let deleteQuery = `
                 SET @NODE_2_ALIVE = ${node2Alive ? 1 : 0};
                 SET @NODE_3_ALIVE = ${node3Alive ? 1 : 0};
-                SET @REPLICATOR_SYNC = 0;
+                SET @REPLICATOR_SYNC = 1;
                 SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel || 'READ COMMITTED'};
                 START TRANSACTION;
                 ${baseQuery} node_1 ${tableQuery}
